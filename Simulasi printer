@@ -1,0 +1,62 @@
+import time
+
+class Printer:
+    def __init__(self):
+        self.queue = []
+        self.is_printing = False
+
+    def add_document(self, document):
+        self.queue.append(document)
+        print(f"Dokumen '{document}' ditambahkan ke antrian.")
+
+    def print_document(self, document):
+        """
+        Simulasi mencetak dokumen.
+        """
+        if self.is_printing:
+            print(f"Printer sedang sibuk. Antrikan '{document}'.")
+            self.queue.append(document)  # Tambahkan ke antrian jika printer sibuk
+            return
+        self.is_printing = True
+        print(f"Mencetak dokumen '{document}'...")
+        time.sleep(2)  # Simulasikan waktu cetak
+        print(f"Dokumen '{document}' selesai dicetak.")
+        self.is_printing = False
+
+        if self.queue:
+            self.print_next()
+
+    def print_next(self):
+        if self.queue:
+            next_doc = self.queue.pop(0)
+            self.print_document(next_doc)
+        else:
+            print("Antrian kosong.")
+
+    def start_printing(self):
+        """
+        Mulai proses cetak jika ada dokumen di antrian.
+        """
+        if not self.queue:
+            print("Antrian kosong. Tidak ada dokumen untuk dicetak.")
+            return
+
+        self.print_next()
+
+
+# Contoh penggunaan
+printer = Printer()
+
+# Tambahkan beberapa dokumen
+printer.add_document("Dokumen 1")
+printer.add_document("Dokumen 2")
+printer.add_document("Dokumen 3")
+printer.add_document("Dokumen 4")
+# Mulai cetak
+printer.start_printing()
+
+# Tambahkan dokumen saat printer sedang mencetak
+printer.add_document("Dokumen 4")
+
+# Tunggu hingga selesai (opsional)
+time.sleep(5)
